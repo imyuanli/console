@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {
     FileOutlined,
-    HomeFilled,
+    HomeFilled, ReadOutlined,
     TeamOutlined,
     ToolFilled,
     UserOutlined,
@@ -32,19 +32,21 @@ const App: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
 
     const items: MenuItem[] = [
-        getItem(<Link to={'/'}>首页</Link>, 'index', <HomeFilled/>),
-        getItem('aTools', 'atools', <ToolFilled/>, [
-            getItem(<Link to={'/atools'}>工具管理</Link>, 't-tools'),
-            getItem(<Link to={'/atools/classify'}>分类管理</Link>, 't-type'),
-            getItem(<Link to={'/atools/recycle'}>回收站</Link>, 't-del'),
+        getItem('Blog', 'blog', <ReadOutlined />, [
+            getItem(<Link to={'/blog/project'}>项目管理</Link>, 'project'),
+            // getItem(<Link to={'/blog'}>编辑文章</Link>, 'b-editor'),
+            // getItem(<Link to={'/blog/article'}>文章管理</Link>, 'b-article'),
+            // getItem(<Link to={'/blog/classify'}>分类管理</Link>, 'b-classify'),
+            // getItem(<Link to={'/blog/recycle'}>回收站</Link>, 'b-del'),
         ]),
-        getItem('Blog', 'blog', <ToolFilled/>, [
-            getItem(<Link to={'/blog'}>编辑文章</Link>, 'b-editor'),
-            getItem(<Link to={'/blog/article'}>文章管理</Link>, 'b-article'),
-            getItem(<Link to={'/blog/classify'}>分类管理</Link>, 'b-classify'),
-            getItem(<Link to={'/blog/recycle'}>回收站</Link>, 'b-del'),
-        ]),
-        getItem(<Link to={'/user'}>管理用户</Link>, 'user', <UserOutlined/>),
+        // getItem(<Link to={'/'}>首页</Link>, 'index', <HomeFilled/>),
+        // getItem('aTools', 'atools', <ToolFilled/>, [
+        //     getItem(<Link to={'/atools'}>工具管理</Link>, 't-tools'),
+        //     getItem(<Link to={'/atools/classify'}>分类管理</Link>, 't-type'),
+        //     getItem(<Link to={'/atools/recycle'}>回收站</Link>, 't-del'),
+        // ]),
+        //
+        // getItem(<Link to={'/user'}>管理用户</Link>, 'user', <UserOutlined/>),
     ];
     return (
         <Layout className={'min-h-screen'}>
@@ -52,8 +54,8 @@ const App: React.FC = () => {
                 <div style={{height: 32, margin: 16, background: 'rgba(255, 255, 255, 0.2)'}}/>
                 <Menu
                     theme="dark"
-                    defaultOpenKeys={['atools', 'blog']}
-                    defaultSelectedKeys={['index']}
+                    defaultOpenKeys={['blog']}
+                    defaultSelectedKeys={['project']}
                     mode="inline"
                     items={items}
                 />
@@ -70,7 +72,7 @@ const App: React.FC = () => {
                     </Popover>
                 </Header>
                 <Content className={'p-3'}>
-                    <div className={'h-96 min-h-96 bg-white p-3'}>
+                    <div className={'h-96 min-h-96 p-3'}>
                         <Outlet/>
                     </div>
                 </Content>
