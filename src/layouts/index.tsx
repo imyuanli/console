@@ -51,6 +51,7 @@ const App: React.FC = () => {
     const items: MenuItem[] = [
         getItem('Blog', 'blog', <ReadOutlined/>, [
             getItem(<Link to={'/blog/editor'}>编辑文章</Link>, 'editor'),
+            getItem(<Link to={'/blog/article'}>文章管理</Link>, 'article'),
             getItem(<Link to={'/blog/project'}>项目管理</Link>, 'project'),
             // getItem(<Link to={'/blog'}>编辑文章</Link>, 'b-editor'),
             // getItem(<Link to={'/blog/article'}>文章管理</Link>, 'b-article'),

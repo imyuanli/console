@@ -1,21 +1,36 @@
 import MdEditor from 'md-editor-rt';
 import 'md-editor-rt/lib/style.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useSetState} from "ahooks";
 import {Button, DatePicker, Input, message, Select} from "antd";
-import {insert_or_update_blog, insert_or_update_project} from "@/service/service";
+import {get_article, insert_or_update_blog} from "@/service/service";
 import {nanoid} from "nanoid";
+import {useLocation} from "@@/exports";
+import dayjs from "dayjs";
 
 
 const editor = () => {
     const [content, setContent] = useState('# Hello Editor');
-    const [data, setData] = useSetState({
+    const [data, setData] = useSetState<any>({
         article_id: '',
         title: '',
         describe: '',
         classify_name: '',
         create_time: '',
     })
+    const {article_id, title, describe, classify_name, create_time} = data
+    const location = useLocation()
+    useEffect(() => {
+        const article_id = location.search.split('=')[1]
+        if (article_id) {
+            get_article({article_id}).then((res) => {
+                if (res) {
+                    delete res.article['view_count']
+                    setData({...res.article})
+                }
+            })
+        }
+    }, [])
 
     const arr: any = [
         {value: 'jack', label: 'Jack'},
@@ -37,9 +52,10 @@ const editor = () => {
     }
     return (
         <div className={'space-y-3'}>
-            <div className={'text-xl'}>添加文章</div>
+            <div className={'text-xl'}>{article_id ? '编辑' : '添加'}文章</div>
             <Input
                 placeholder={'标题'}
+                value={title}
                 onChange={(e) => {
                     setData({
                         title: e.target.value
@@ -52,12 +68,14 @@ const editor = () => {
                         describe: e.target.value
                     })
                 }}
+                value={describe}
                 placeholder={'描述'}
             />
             <div className={'flex justify-between items-center'}>
                 <div>
                     <Select
                         placeholder="选择分类"
+                        value={classify_name}
                         options={arr}
                         className={'mr-3'}
                         onChange={(value) => {
@@ -68,6 +86,8 @@ const editor = () => {
                     />
                     <DatePicker
                         placeholder={'发布时间'}
+                        value={dayjs(create_time)}
+                        defaultValue={create_time ? create_time : dayjs(create_time)}
                         onChange={(date, dateString) => {
                             setData({
                                 create_time: dateString
