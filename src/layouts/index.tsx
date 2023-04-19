@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 import type {MenuProps} from 'antd';
 import {Avatar, Button, Layout, Menu, Popover,} from 'antd';
-import {Link, Outlet} from "@@/exports";
+import {Link, Outlet, useLocation, useNavigate} from "@@/exports";
 
 const {Header, Content, Footer, Sider} = Layout;
 
@@ -29,6 +29,23 @@ function getItem(
 }
 
 const App: React.FC = () => {
+    const location = useLocation();
+    const pathname = location.pathname
+    //初始 key
+    const pathArr = pathname.split('/')
+
+    //登录页面
+    if (pathname === '/login') {
+        return (
+            <div className={'main'}>
+                <div className={'content'}>
+                    <Outlet/>
+                </div>
+            </div>
+        )
+    }
+
+    //收缩
     const [collapsed, setCollapsed] = useState(false);
 
     const items: MenuItem[] = [
@@ -56,7 +73,7 @@ const App: React.FC = () => {
                 <Menu
                     theme="dark"
                     defaultOpenKeys={['blog']}
-                    defaultSelectedKeys={['project']}
+                    defaultSelectedKeys={[pathArr[pathArr.length - 1]]}
                     mode="inline"
                     items={items}
                 />
@@ -73,9 +90,7 @@ const App: React.FC = () => {
                     </Popover>
                 </Header>
                 <Content className={'p-3'}>
-                    <div className={'h-96 min-h-96 p-3'}>
-                        <Outlet/>
-                    </div>
+                    <Outlet/>
                 </Content>
                 <Footer className={'text-center'}>鸢离 © {new Date().getFullYear()} </Footer>
             </Layout>
