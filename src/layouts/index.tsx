@@ -9,6 +9,21 @@ import {
 import type {MenuProps} from 'antd';
 import {Avatar, Button, Layout, Menu, Popover,} from 'antd';
 import {Link, Outlet, useLocation, useNavigate} from "@@/exports";
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import localeData from 'dayjs/plugin/localeData'
+import weekday from 'dayjs/plugin/weekday'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
+import weekYear from 'dayjs/plugin/weekYear'
+import dayjs from "dayjs";
+
+dayjs.extend(customParseFormat)
+dayjs.extend(advancedFormat)
+dayjs.extend(weekday)
+dayjs.extend(localeData)
+dayjs.extend(weekOfYear)
+dayjs.extend(weekYear)
+
 
 const {Header, Content, Footer, Sider} = Layout;
 

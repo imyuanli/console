@@ -17,7 +17,7 @@ const editor = () => {
         title: '',
         describe: '',
         classify_name: '',
-        create_time: '',
+        create_time: dayjs().format('YYYY-MM-DD'),
     })
     const [loading, setLoading] = useState<any>(false)
     const {article_id, title, describe, classify_name, create_time} = data
