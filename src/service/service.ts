@@ -9,3 +9,7 @@ export async function insert_or_update_project(payload?: any) {
     return request.post(BASE_URL + `console/insert_or_update_project/`, payload)
 }
 
+export async function insert_or_update_blog(payload?: any) {
+    return request.post(BASE_URL + `console/insert_or_update_blog/`, payload)
+}
+

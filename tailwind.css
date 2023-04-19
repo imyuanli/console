@@ -12,3 +12,11 @@ body{
     justify-content: center;
     align-items: center;
 }
+
+.md-editor-toolbar-wrapper{
+    height: 56px !important;
+}
+
+.md-editor-toolbar{
+    overflow-x: auto;
+}
