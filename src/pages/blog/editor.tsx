@@ -12,13 +12,15 @@ import Loading from "@/components/loading";
 
 const editor = () => {
     const [content, setContent] = useState('# Hello Editor');
-    const [data, setData] = useSetState<any>({
+    const initData = {
         article_id: '',
         title: '',
         describe: '',
         classify_name: '',
         create_time: dayjs().format('YYYY-MM-DD'),
-    })
+    }
+
+    const [data, setData] = useSetState<any>(initData)
     const [loading, setLoading] = useState<any>(false)
     const {article_id, title, describe, classify_name, create_time} = data
     const location = useLocation()
@@ -37,7 +39,11 @@ const editor = () => {
                 setLoading(false)
             })
         }
-    }, [])
+        else{
+            setData({...initData})
+            setContent('# Hello Editor')
+        }
+    }, [location])
 
     const arr: any = [
         {value: 'jack', label: 'Jack'},
