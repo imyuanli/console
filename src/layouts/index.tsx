@@ -49,6 +49,7 @@ const App: React.FC = () => {
     //初始 key
     const pathArr = pathname.split('/')
 
+    console.log("pathArr",pathArr)
     //登录页面
     if (pathname === '/login') {
         return (
@@ -89,7 +90,7 @@ const App: React.FC = () => {
                 <Menu
                     theme="dark"
                     defaultOpenKeys={['blog']}
-                    defaultSelectedKeys={[pathArr[pathArr.length - 1]]}
+                    selectedKeys={[pathArr[pathArr.length - 1]]}
                     mode="inline"
                     items={items}
                 />
