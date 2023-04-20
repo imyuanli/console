@@ -1,17 +1,33 @@
-import {Button, Table} from "antd";
+import {Button, message, Popconfirm, Table, Tabs} from "antd";
 import {Link} from "@@/exports";
-import {useEffect, useState} from "react";
-import {get_article_list} from "@/service/service";
+import {useEffect} from "react";
+import {get_article_list, update_article_state} from "@/service/service";
+import {useSetState} from "ahooks";
+import {cancel} from "@umijs/utils/compiled/@clack/prompts";
 
 
 const Article = () => {
-    const [dataSource, setDataSource] = useState(null)
+    const [state, setState] = useSetState({
+        currentKey: 0,
+        dataSource: null,
+    })
+    const {currentKey, dataSource} = state
+
+    const getArticleList = () => {
+        setState({
+            dataSource: null
+        })
+        get_article_list({is_delete: currentKey}).then((res: any) => {
+            setState({
+                dataSource: res['article_list']
+            })
+        })
+    }
 
     useEffect(() => {
-        get_article_list().then((res: any) => {
-            setDataSource(res['article_list'])
-        })
-    }, [])
+        getArticleList()
+    }, [currentKey])
+
     //表头
     const columns: any = [
         {
@@ -51,21 +67,62 @@ const Article = () => {
                             编辑
                         </Link>
                     </Button>
-                    <Button
-                        type={'primary'}
-                        danger
+                    <Popconfirm
+                        title={`确认${currentKey ? '上架' : '下架'}?`}
+                        onConfirm={() => {
+                            handleChangeArticleState(record.article_id)
+                        }}
+                        okText="Yes"
+                        cancelText="No"
                     >
-                        下架
-                    </Button>
+                        <Button
+                            type={'primary'}
+                            danger
+                        >
+                            {currentKey ? '上架' : '下架'}
+                        </Button>
+                    </Popconfirm>
+
                 </div>
             ),
         },
     ];
 
+    const handleChangeArticleState = (article_id) => {
+        update_article_state({article_id, is_delete: currentKey ? 0 : 1}).then((res) => {
+            if (res) {
+                message.success(`${currentKey ? '上架' : '下架'}成功`)
+                getArticleList()
+            }
+        })
+    }
+
 
     return (
         <div>
-            <Table columns={columns} dataSource={dataSource} loading={!dataSource}/>
+            <Tabs
+                activeKey={currentKey}
+                items={
+                    [
+                        {
+                            key: 0,
+                            label: `已上架`,
+                            children: <Table columns={columns} dataSource={dataSource} loading={!dataSource}/>,
+                        },
+                        {
+                            key: 1,
+                            label: `草稿箱`,
+                            children: <Table columns={columns} dataSource={dataSource} loading={!dataSource}/>,
+                        },
+                    ]
+                }
+                onChange={(key) => {
+                    setState({
+                        currentKey: key
+                    })
+                }}
+            />
+
         </div>
     );
 }
