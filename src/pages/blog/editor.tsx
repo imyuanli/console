@@ -3,7 +3,7 @@ import 'md-editor-rt/lib/style.css';
 import {useEffect, useState} from "react";
 import {useSetState} from "ahooks";
 import {Button, DatePicker, Input, message, Select} from "antd";
-import {get_article, insert_or_update_blog} from "@/service/service";
+import {get_article, insert_or_update_article} from "@/service/service";
 import {nanoid} from "nanoid";
 import {useLocation} from "@@/exports";
 import dayjs from "dayjs";
@@ -30,6 +30,7 @@ const editor = () => {
                 if (res) {
                     delete res.article['view_count']
                     setData({...res.article})
+                    setContent(res.article.content)
                     setLoading(false)
                 }
             }).catch(() => {
@@ -45,12 +46,16 @@ const editor = () => {
         {value: 'disabled', label: 'Disabled'},
     ]
 
-    const handlePublish = () => {
+    const handlePublish = (is_delete) => {
         let obj = {...data, content}
         if (!data.article_id) {
             obj.article_id = nanoid()
         }
-        insert_or_update_blog(obj).then((res) => {
+        //草稿箱
+        if (is_delete) {
+            obj.is_delete = 1
+        }
+        insert_or_update_article(obj).then((res) => {
             if (res.article_id) {
                 message.success(`${res?.created ? '新建' : '更新'}成功`)
             }
@@ -107,8 +112,10 @@ const editor = () => {
                                 />
                             </div>
                             <div className={'space-x-3'}>
-                                <Button onClick={handlePublish} type={'primary'}>发布</Button>
-                                <Button type={'primary'}>存草稿</Button>
+                                <Button danger onClick={handlePublish} type={'primary'}>发布</Button>
+                                <Button onClick={() => {
+                                    handlePublish(1)
+                                }} type={'primary'}>存草稿</Button>
                             </div>
                         </div>
                         <MdEditor
