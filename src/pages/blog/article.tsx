@@ -42,8 +42,8 @@ const Article = () => {
         },
         {
             title: '分类',
-            dataIndex: 'classify_name',
-            key: 'classify_name',
+            dataIndex: 'classify_value',
+            key: 'classify_value',
         },
         {
             title: '阅读数量',

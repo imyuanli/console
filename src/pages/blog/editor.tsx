@@ -16,13 +16,13 @@ const editor = () => {
         article_id: '',
         title: '',
         describe: '',
-        classify_name: '',
+        classify_value: '',
         create_time: dayjs().format('YYYY-MM-DD'),
     }
 
     const [data, setData] = useSetState<any>(initData)
     const [loading, setLoading] = useState<any>(false)
-    const {article_id, title, describe, classify_name, create_time} = data
+    const {article_id, title, describe, classify_value, create_time} = data
     const location = useLocation()
     useEffect(() => {
         const article_id = location.search.split('=')[1]
@@ -97,12 +97,12 @@ const editor = () => {
                             <div>
                                 <Select
                                     placeholder="选择分类"
-                                    value={classify_name}
+                                    value={classify_value}
                                     options={arr}
                                     className={'mr-3'}
                                     onChange={(value) => {
                                         setData({
-                                            classify_name: value
+                                            classify_value: value
                                         })
                                     }}
                                 />
