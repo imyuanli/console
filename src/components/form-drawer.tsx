@@ -1,6 +1,6 @@
 import {Button, Drawer, message, Table} from "antd";
 import FormFrame from "@/components/form-frame";
-import React, {useState} from "react";
+import React, {forwardRef, useImperativeHandle, useState} from "react";
 import {nanoid} from "nanoid";
 
 interface props {
@@ -16,19 +16,31 @@ interface props {
     getTableList: any
 }
 
-const FormDrawer: React.FunctionComponent<props> = ({
-                                                        btnText,
-                                                        columns,
-                                                        dataSource,
-                                                        id,
-                                                        initData,
-                                                        formData,
-                                                        data,
-                                                        setState,
-                                                        api,
-                                                        getTableList
-                                                    }) => {
+const FormDrawer: React.FunctionComponent<props> = forwardRef(({
+                                                                   btnText,
+                                                                   columns,
+                                                                   dataSource,
+                                                                   id,
+                                                                   initData,
+                                                                   formData,
+                                                                   data,
+                                                                   setState,
+                                                                   api,
+                                                                   getTableList
+                                                               }, ref) => {
     const [open, setOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+
+    // 可以让父组件调用子组件的方法
+    useImperativeHandle(ref, () => ({
+        onOpenDrawer(record) {
+            setOpen(true)
+            setState({
+                data: {...record}
+            })
+        }
+    }));
 
     const onCloseDrawer = () => {
         setOpen(false)
@@ -46,6 +58,7 @@ const FormDrawer: React.FunctionComponent<props> = ({
     }
 
     const handleInsertOrUpdate = () => {
+        setLoading(true)
         let obj = {...data}
         if (!data[id]) {
             obj[id] = nanoid()
@@ -54,8 +67,11 @@ const FormDrawer: React.FunctionComponent<props> = ({
             if (res) {
                 getTableList()
                 onCloseDrawer()
+                setLoading(false)
                 message.success(`${res?.created ? '新建' : '更新'}成功`)
             }
+        }).catch(() => {
+            setLoading(false)
         })
     }
 
@@ -84,9 +100,11 @@ const FormDrawer: React.FunctionComponent<props> = ({
                 width={'40%'}
                 footer={
                     <div className={'flex justify-end'}>
-                        <Button size={'large'}
-                                type={'primary'}
-                                onClick={handleInsertOrUpdate}
+                        <Button
+                            size={'large'}
+                            type={'primary'}
+                            onClick={handleInsertOrUpdate}
+                            loading={loading}
                         >
                             {data[id] ? "更新" : "添加"}
                         </Button>
@@ -118,7 +136,7 @@ const FormDrawer: React.FunctionComponent<props> = ({
             </Drawer>
         </div>
     );
-}
+})
 
 
 export default FormDrawer

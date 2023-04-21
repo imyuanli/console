@@ -1,6 +1,6 @@
 import {Button, message, Popconfirm, Table, Tabs} from "antd";
 import {Link} from "@@/exports";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {
     get_article_list,
     get_classify_list,
@@ -126,6 +126,7 @@ const Article = () => {
     }
 
     //分类
+    const childRef = useRef(null)
     const columnsClassify: any = [
         {
             title: '名称',
@@ -144,10 +145,11 @@ const Article = () => {
                 <div className={'space-x-3'}>
                     <Button
                         type={'primary'}
+                        onClick={() => {
+                            childRef.current.onOpenDrawer(record)
+                        }}
                     >
-                        <Link to={`/blog/editor?article_id=${record.article_id}`}>
-                            编辑
-                        </Link>
+                        编辑
                     </Button>
                     <Popconfirm
                         title={`确认删除?`}
@@ -201,6 +203,7 @@ const Article = () => {
                             label: `文章分类`,
                             children: <>
                                 <FormDrawer
+                                    ref={childRef}
                                     btnText={'新增分类'}
                                     columns={columnsClassify}
                                     dataSource={classifyList}
