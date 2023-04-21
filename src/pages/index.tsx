@@ -4,7 +4,7 @@ import {useNavigate} from "@@/exports";
 const Index = () => {
     const navigate = useNavigate()
     useEffect(() => {
-        navigate('/blog/project')
+        navigate('/blog/editor')
     }, [])
 }
 

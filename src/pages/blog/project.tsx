@@ -93,6 +93,10 @@ const Project = () => {
             attribute: 'link'
         },
         {
+            title: '优先级',
+            attribute: 'priority'
+        },
+        {
             title: '标签',
             attribute: 'tag'
         },
@@ -152,6 +156,11 @@ const Project = () => {
             title: '链接',
             dataIndex: 'link',
             key: 'link',
+        },
+        {
+            title: '优先级',
+            dataIndex: 'priority',
+            key: 'priority',
         },
         {
             title: '标签',
