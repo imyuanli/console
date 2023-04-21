@@ -1,10 +1,9 @@
-import {useEffect} from "react";
-import {Table, Image, Tag, Button, Drawer, message} from "antd";
+import {useEffect, useRef} from "react";
+import {Image, Tag, Button} from "antd";
 import {get_project_list, insert_or_update_project} from "@/service/service";
 import {useSetState} from "ahooks";
-import FormFrame from "@/components/form-frame";
 import {getDefaultValue} from '@/utils'
-import {nanoid} from "nanoid";
+import FormDrawer from "@/components/form-drawer";
 
 const Project = () => {
     //初始值
@@ -25,7 +24,7 @@ const Project = () => {
         open: false,
         data: {...initData}
     })
-    const {dataSource, open, data} = state
+    const {dataSource, data} = state
 
     //表单数据
     const stateOptions = [
@@ -127,6 +126,8 @@ const Project = () => {
     }, [])
 
     //表头
+
+    const childRef = useRef(null)
     const columns: any = [
         {
             title: 'LOGO',
@@ -196,7 +197,7 @@ const Project = () => {
                 <Button
                     type={'primary'}
                     onClick={() => {
-                        onOpenDrawer(record)
+                        childRef.current.onOpenDrawer(record)
                     }}
                 >
                     编辑
@@ -205,95 +206,21 @@ const Project = () => {
         },
     ];
 
-    //打开drawer
-    const onOpenDrawer = (record) => {
-        setState({
-            open: true,
-            data: {...record}
-        })
-    }
 
-    //关闭滞空
-    const onCloseDrawer = () => {
-        setState({
-            open: false,
-            data: {...initData}
-        })
-    }
-
-    //编辑表单修改的值
-    const onChangeValue = (attribute, value) => {
-        const res = {...data}
-        res[attribute] = value
-        setState({
-            data: {...res}
-        })
-    }
-
-    //更新或添加值
-    const insertOrUpdateProject = () => {
-        let obj = {...data}
-        if (!data.uid) {
-            obj.uid = nanoid()
-        }
-        insert_or_update_project(obj).then((res) => {
-            if (res.uid) {
-                getProjectList()
-                onCloseDrawer()
-                message.success(`${res?.created ? '新建' : '更新'}成功`)
-            }
-        })
-    }
     return (
-        <div className={'space-y-3'}>
-            <div className={'w-full flex justify-end'}>
-                <Button
-                    type={'primary'}
-                    onClick={() => {
-                        setState({
-                            open: true,
-                        })
-                    }}
-                >
-                    添加项目
-                </Button>
-            </div>
-            <Table columns={columns} dataSource={dataSource} loading={!dataSource}/>
-            <Drawer
-                title={data.uid ? '编辑' : '新增'}
-                placement="right"
-                onClose={onCloseDrawer}
-                open={open}
-                width={'40%'}
-                footer={
-                    <div className={'flex justify-end'}>
-                        <Button size={'large'}
-                                type={'primary'}
-                                onClick={insertOrUpdateProject}
-                        >
-                            {data.uid ? "更新" : "添加"}
-                        </Button>
-                        <Button onClick={onCloseDrawer} size={'large'} className={'ml-3'}>取消</Button>
-                    </div>
-                }
-            >
-                <div className={'space-y-6'}>
-                    {formData.map((item, index) => {
-                        const {title, attribute, options} = item
-                        return (
-                            <FormFrame
-                                key={attribute}
-                                title={title}
-                                attribute={attribute}
-                                value={data[attribute]}
-                                onChange={onChangeValue}
-                                options={options}
-                            />
-                        )
-                    })}
-                </div>
-            </Drawer>
-        </div>
+        <FormDrawer
+            ref={childRef}
+            btnText={'新增分类'}
+            columns={columns}
+            dataSource={dataSource}
+            id={'uid'}
+            data={data}
+            setState={setState}
+            initData={initData}
+            formData={formData}
+            api={insert_or_update_project}
+            getTableList={getProjectList}
+        />
     )
 }
 
