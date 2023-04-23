@@ -3,7 +3,7 @@ import 'md-editor-rt/lib/style.css';
 import {useEffect, useState} from "react";
 import {useSetState} from "ahooks";
 import {Button, DatePicker, Input, message, Select} from "antd";
-import {get_article, insert_or_update_article} from "@/service/service";
+import {get_article, get_classify_list, insert_or_update_article} from "@/service/service";
 import {nanoid} from "nanoid";
 import {useLocation} from "@@/exports";
 import dayjs from "dayjs";
@@ -12,20 +12,54 @@ import BASE_URL from "@/service/base_url";
 import axios from "axios";
 import {IMG_URL} from "@/utils";
 
-
+const initData = {
+    article_id: '',
+    title: '',
+    describe: '',
+    classify_value: '',
+    create_time: dayjs().format('YYYY-MM-DD'),
+    preview_theme: 'default',
+    code_theme: 'atom',
+}
+const previewThemeOptions: any = [
+    {value: 'default', label: 'default'},
+    {value: 'github', label: 'github'},
+    {value: 'vuepress', label: 'vuepress'},
+    {value: 'mk-cute', label: 'mk-cute'},
+    {value: 'smart-blue', label: 'smart-blue'},
+    {value: 'cyanosis', label: 'cyanosis'},
+]
+const codeThemeOptions: any = [
+    {value: 'atom', label: 'atom'},
+    {value: 'a11y', label: 'a11y'},
+    {value: 'github', label: 'github'},
+    {value: 'gradient', label: 'gradient'},
+    {value: 'kimbie', label: 'kimbie'},
+    {value: 'paraiso', label: 'paraiso'},
+    {value: 'qtcreator', label: 'qtcreator'},
+    {value: 'stackoverflow', label: 'stackoverflow'},
+]
 const editor = () => {
     const [content, setContent] = useState('# Hello Editor');
-    const initData = {
-        article_id: '',
-        title: '',
-        describe: '',
-        classify_value: '',
-        create_time: dayjs().format('YYYY-MM-DD'),
-    }
+    const [classifyOptions, setClassifyOptions] = useState([]);
+
+    useEffect(() => {
+        get_classify_list().then((res) => {
+            if (res) {
+                const list = res['classify_list'].map((item) => {
+                    return {
+                        label: item.classify_label,
+                        value: item.classify_value,
+                    }
+                })
+                setClassifyOptions([...list])
+            }
+        })
+    }, [])
 
     const [data, setData] = useSetState<any>(initData)
     const [loading, setLoading] = useState<any>(false)
-    const {article_id, title, describe, classify_value, create_time} = data
+    const {article_id, title, describe, classify_value, create_time, preview_theme, code_theme} = data
     const location = useLocation()
     useEffect(() => {
         const article_id = location.search.split('=')[1]
@@ -113,12 +147,12 @@ const editor = () => {
                             placeholder={'描述'}
                         />
                         <div className={'flex justify-between items-center'}>
-                            <div>
+                            <div className={'space-x-3'}>
                                 <Select
+                                    style={{minWidth: 150}}
                                     placeholder="选择分类"
                                     value={classify_value}
-                                    options={arr}
-                                    className={'mr-3'}
+                                    options={classifyOptions}
                                     onChange={(value) => {
                                         setData({
                                             classify_value: value
@@ -132,6 +166,28 @@ const editor = () => {
                                     onChange={(date, dateString) => {
                                         setData({
                                             create_time: dateString
+                                        })
+                                    }}
+                                />
+                                <Select
+                                    style={{minWidth: 150}}
+                                    placeholder="预览主题"
+                                    value={preview_theme}
+                                    options={previewThemeOptions}
+                                    onChange={(value) => {
+                                        setData({
+                                            preview_theme: value
+                                        })
+                                    }}
+                                />
+                                <Select
+                                    style={{minWidth: 150}}
+                                    placeholder="代码主题"
+                                    value={code_theme}
+                                    options={codeThemeOptions}
+                                    onChange={(value) => {
+                                        setData({
+                                            code_theme: value
                                         })
                                     }}
                                 />
@@ -153,6 +209,8 @@ const editor = () => {
                             }}
                             showCodeRowNumber={true}
                             onUploadImg={onUploadImg}
+                            previewTheme={preview_theme}
+                            codeTheme={code_theme}
                         />
                     </>
             }
