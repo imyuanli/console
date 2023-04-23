@@ -38,8 +38,7 @@ const editor = () => {
             }).catch(() => {
                 setLoading(false)
             })
-        }
-        else{
+        } else {
             setData({...initData})
             setContent('# Hello Editor')
         }
@@ -54,12 +53,9 @@ const editor = () => {
 
     const handlePublish = (is_delete) => {
         let obj = {...data, content}
+        obj.is_delete = is_delete
         if (!data.article_id) {
             obj.article_id = nanoid()
-        }
-        //草稿箱
-        if (is_delete) {
-            obj.is_delete = 1
         }
         insert_or_update_article(obj).then((res) => {
             if (res.article_id) {
@@ -118,7 +114,9 @@ const editor = () => {
                                 />
                             </div>
                             <div className={'space-x-3'}>
-                                <Button danger onClick={handlePublish} type={'primary'}>发布</Button>
+                                <Button danger onClick={() => {
+                                    handlePublish(0)
+                                }} type={'primary'}>发布</Button>
                                 <Button onClick={() => {
                                     handlePublish(1)
                                 }} type={'primary'}>存草稿</Button>
