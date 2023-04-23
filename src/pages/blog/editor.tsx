@@ -8,6 +8,9 @@ import {nanoid} from "nanoid";
 import {useLocation} from "@@/exports";
 import dayjs from "dayjs";
 import Loading from "@/components/loading";
+import BASE_URL from "@/service/base_url";
+import axios from "axios";
+import {IMG_URL} from "@/utils";
 
 
 const editor = () => {
@@ -63,6 +66,26 @@ const editor = () => {
             }
         })
     }
+
+    const onUploadImg = async (files, callback) => {
+        const res = await Promise.all(
+            files.map((file) => {
+                return new Promise((rev, rej) => {
+                    const form = new FormData();
+                    form.append('file', file);
+                    axios.post(`${BASE_URL}console/upload_blog_image/`, form, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                        .then((res) => rev(res))
+                        .catch((error) => rej(error));
+                });
+            })
+        );
+        callback(res.map((item) => `${IMG_URL}/${item.data.data}`))
+    };
+
     return (
         <div className={'space-y-3 w-full'}>
             {
@@ -126,9 +149,10 @@ const editor = () => {
                             modelValue={content}
                             onChange={setContent}
                             style={{
-                                height: 800
+                                height: '75vh'
                             }}
                             showCodeRowNumber={true}
+                            onUploadImg={onUploadImg}
                         />
                     </>
             }
