@@ -35,3 +35,6 @@ export async function insert_or_update_article_classify(payload?: any) {
     return request.post(BASE_URL + `console/insert_or_update_article_classify/`, payload)
 }
 
+export async function get_login(payload?: any) {
+    return request.post(BASE_URL + `console/get_login/`, payload)
+}

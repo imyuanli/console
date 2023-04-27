@@ -9,6 +9,7 @@ import {
 } from "@/service/service";
 import {useSetState} from "ahooks";
 import FormDrawer from "@/components/form-drawer";
+import withAuth from "@/hocs/withAuth";
 
 
 const Article = () => {
@@ -231,4 +232,4 @@ const Article = () => {
 }
 
 
-export default Article
+export default withAuth(Article)

@@ -4,6 +4,7 @@ import {get_project_list, insert_or_update_project} from "@/service/service";
 import {useSetState} from "ahooks";
 import {getDefaultValue} from '@/utils'
 import FormDrawer from "@/components/form-drawer";
+import withAuth from "@/hocs/withAuth";
 
 const Project = () => {
     //初始值
@@ -234,4 +235,4 @@ const Project = () => {
 }
 
 
-export default Project
+export default withAuth(Project)

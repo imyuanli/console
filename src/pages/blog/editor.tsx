@@ -11,6 +11,7 @@ import Loading from "@/components/loading";
 import BASE_URL from "@/service/base_url";
 import axios from "axios";
 import {IMG_URL} from "@/utils";
+import withAuth from "@/hocs/withAuth";
 
 const initData = {
     article_id: '',
@@ -218,5 +219,4 @@ const editor = () => {
     );
 }
 
-
-export default editor
+export default withAuth(editor)
