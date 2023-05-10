@@ -38,3 +38,12 @@ export async function insert_or_update_article_classify(payload?: any) {
 export async function get_login(payload?: any) {
     return request.post(BASE_URL + `console/get_login/`, payload)
 }
+
+
+export async function insert_or_update_tool(payload?: any) {
+    return request.post(BASE_URL + `console/insert_or_update_tool/`, payload)
+}
+
+export async function get_tools_list() {
+    return request.get(BASE_URL + `tools/get_tools_list/`)
+}

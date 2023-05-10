@@ -65,23 +65,15 @@ const App: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
 
     const items: MenuItem[] = [
-        getItem('Blog', 'blog', <ReadOutlined/>, [
+        getItem('博客', 'blog', <ReadOutlined/>, [
             getItem(<Link to={'/blog/editor'}>编辑文章</Link>, 'editor'),
             getItem(<Link to={'/blog/article'}>文章管理</Link>, 'article'),
             getItem(<Link to={'/blog/project'}>项目管理</Link>, 'project'),
-            // getItem(<Link to={'/blog'}>编辑文章</Link>, 'b-editor'),
-            // getItem(<Link to={'/blog/article'}>文章管理</Link>, 'b-article'),
-            // getItem(<Link to={'/blog/classify'}>分类管理</Link>, 'b-classify'),
-            // getItem(<Link to={'/blog/recycle'}>回收站</Link>, 'b-del'),
         ]),
-        // getItem(<Link to={'/'}>首页</Link>, 'index', <HomeFilled/>),
-        // getItem('aTools', 'atools', <ToolFilled/>, [
-        //     getItem(<Link to={'/atools'}>工具管理</Link>, 't-tools'),
-        //     getItem(<Link to={'/atools/classify'}>分类管理</Link>, 't-type'),
-        //     getItem(<Link to={'/atools/recycle'}>回收站</Link>, 't-del'),
-        // ]),
-        //
-        // getItem(<Link to={'/user'}>管理用户</Link>, 'user', <UserOutlined/>),
+        getItem('aTools', 'tool', <ToolFilled/>, [
+            getItem(<Link to={'/tool/manage'}>工具管理</Link>, 'manage'),
+            getItem(<Link to={'/tool/classify'}>分类管理</Link>, 'classify'),
+        ]),
     ];
     return (
         <Layout className={'min-h-screen'}>
