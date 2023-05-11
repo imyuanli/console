@@ -49,7 +49,6 @@ const App: React.FC = () => {
     //初始 key
     const pathArr = pathname.split('/')
 
-    console.log("pathArr",pathArr)
     //登录页面
     if (pathname === '/login') {
         return (
@@ -70,10 +69,7 @@ const App: React.FC = () => {
             getItem(<Link to={'/blog/article'}>文章管理</Link>, 'article'),
             getItem(<Link to={'/blog/project'}>项目管理</Link>, 'project'),
         ]),
-        getItem('aTools', 'tool', <ToolFilled/>, [
-            getItem(<Link to={'/tool/manage'}>工具管理</Link>, 'manage'),
-            getItem(<Link to={'/tool/classify'}>分类管理</Link>, 'classify'),
-        ]),
+        getItem(<Link to={'/tools'}>工具管理</Link>, 'tools', <ToolFilled/>),
     ];
     return (
         <Layout className={'min-h-screen'}>

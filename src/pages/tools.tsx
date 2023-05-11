@@ -18,7 +18,7 @@ import {
     PlaySquareOutlined, RetweetOutlined, ToolOutlined
 } from "@ant-design/icons";
 
-function Tool() {
+function Tools() {
     //初始值
     const initData: any = {
         name: '',
@@ -253,4 +253,4 @@ function Tool() {
 }
 
 
-export default withAuth(Tool)
+export default withAuth(Tools)
