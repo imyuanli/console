@@ -1,4 +1,4 @@
-import {Button, Drawer, message, Table} from "antd";
+import {Button, Drawer, Input, message, Table} from "antd";
 import FormFrame from "@/components/form-frame";
 import React, {forwardRef, useImperativeHandle, useState} from "react";
 import {nanoid} from "nanoid";
@@ -30,6 +30,7 @@ const FormDrawer: React.FunctionComponent<props> = forwardRef(({
                                                                }, ref) => {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [resArr, setResArr] = useState(null)
 
 
     // 可以让父组件调用子组件的方法
@@ -75,9 +76,20 @@ const FormDrawer: React.FunctionComponent<props> = forwardRef(({
         })
     }
 
+    //搜索
+    const handleChange = (e) => {
+        let val = e.target.value
+        setResArr(dataSource.filter((item: any) => item.name.toLowerCase().indexOf(val.toLowerCase()) >= 0))
+    }
+
     return (
         <div className={'space-y-3'}>
-            <div className={'w-full flex justify-end'}>
+            <div className={'w-full flex justify-between space-x-3'}>
+                <Input
+                    placeholder={'搜索'}
+                    allowClear
+                    onChange={handleChange}
+                />
                 <Button
                     type={'primary'}
                     onClick={() => {
@@ -89,7 +101,7 @@ const FormDrawer: React.FunctionComponent<props> = forwardRef(({
             </div>
             <Table
                 columns={columns}
-                dataSource={dataSource}
+                dataSource={resArr ? resArr : dataSource}
                 loading={!dataSource}
             />
             <Drawer
