@@ -1,7 +1,8 @@
-import {Button, Popconfirm} from "antd";
+import {Button, message, Popconfirm} from "antd";
 import React, {useEffect, useRef} from "react";
 import {useSetState} from "ahooks";
 import {
+    delete_tool,
     get_tools_list,
     insert_or_update_tool
 } from "@/service/service";
@@ -207,6 +208,7 @@ function Tool() {
             key: 'action',
             render: (value: any, record: any) => <div>
                 <Button
+                    type={'primary'}
                     className={'mr-3'}
                     onClick={() => {
                         childRef.current.onOpenDrawer(record)
@@ -217,7 +219,12 @@ function Tool() {
                 <Popconfirm
                     title={`确定删除${record.name}?`}
                     onConfirm={() => {
-                        console.log(record.classify_id)
+                        delete_tool({tid: record.tid}).then((res) => {
+                            if (res) {
+                                message.success('删除成功')
+                                getToolsList()
+                            }
+                        })
                     }}
                     okText="确认"
                     cancelText="取消"
@@ -231,7 +238,7 @@ function Tool() {
     return (
         <FormDrawer
             ref={childRef}
-            btnText={'新增分类'}
+            btnText={'新增工具'}
             columns={columns}
             dataSource={dataSource}
             id={'uid'}
