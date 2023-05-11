@@ -115,6 +115,9 @@ const Article = () => {
 
                 </div>
             ),
+            fixed: 'right',
+            width: 200,
+
         },
     ];
     const handleChangeArticleState = (article_id) => {
@@ -192,12 +195,12 @@ const Article = () => {
                         {
                             key: 0,
                             label: `已上架`,
-                            children: <Table columns={columns} dataSource={dataSource} loading={!dataSource}/>,
+                            children: <Table scroll={{ x: 1300 }} columns={columns} dataSource={dataSource} loading={!dataSource}/>,
                         },
                         {
                             key: 1,
                             label: `草稿箱`,
-                            children: <Table columns={columns} dataSource={dataSource} loading={!dataSource}/>,
+                            children: <Table scroll={{ x: 1300 }} columns={columns} dataSource={dataSource} loading={!dataSource}/>,
                         },
                         {
                             key: 3,
