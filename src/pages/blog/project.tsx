@@ -11,9 +11,8 @@ const Project = () => {
     const initData: any = {
         name: '',
         description: '',
-        link: '',
+        keyword: '',
         tag: '',
-        logo: '',
         state: 1,
         version: '',
         powered_by: 'umi',
@@ -68,19 +67,19 @@ const Project = () => {
             value: 'uni'
         },
         {
-            label: 'Vue3',
-            value: 'vue3'
+            label: 'Vue',
+            value: 'vue'
         },
         {
-            label: 'Vue2',
-            value: 'vue2'
+            label: 'NuxtJs',
+            value: 'nuxt'
+        },
+        {
+            label: '其他',
+            value: 'other'
         },
     ]
     const formData = [
-        {
-            title: 'LOGO',
-            attribute: 'logo'
-        },
         {
             title: '名称',
             attribute: 'name'
@@ -90,8 +89,8 @@ const Project = () => {
             attribute: 'description'
         },
         {
-            title: '链接',
-            attribute: 'link'
+            title: '关键词',
+            attribute: 'keyword'
         },
         {
             title: '优先级',
@@ -135,15 +134,6 @@ const Project = () => {
     const childRef = useRef(null)
     const columns: any = [
         {
-            title: 'LOGO',
-            dataIndex: 'logo',
-            key: 'logo',
-            render: (text) => <Image
-                width={50}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-            />,
-        },
-        {
             title: '名称',
             dataIndex: 'name',
             key: 'name',
@@ -154,9 +144,9 @@ const Project = () => {
             key: 'description',
         },
         {
-            title: '链接',
-            dataIndex: 'link',
-            key: 'link',
+            title: '关键词',
+            dataIndex: 'keyword',
+            key: 'keyword',
         },
         {
             title: '优先级',
@@ -220,7 +210,7 @@ const Project = () => {
     return (
         <FormDrawer
             ref={childRef}
-            btnText={'新增分类'}
+            btnText={'新增作品'}
             columns={columns}
             dataSource={dataSource}
             id={'uid'}
